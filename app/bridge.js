@@ -40,7 +40,9 @@ ipcMain.on(TaskManBridgeRequest, async (evt, request) => {
   }
 
   try {
-    const ret = await service[method].call(service, payload);
+    console.log('ret', payload);
+    const ret = await service[request.method].call(service, payload);
+    console.log('ret', ret);
     let data = JSON.stringify(ret);
     evt.reply(TaskManBridgeResponse, {
       status: ResponseStatus.SUCC,
@@ -49,7 +51,7 @@ ipcMain.on(TaskManBridgeRequest, async (evt, request) => {
     });
   } catch (e) {
     evt.reply(TaskManBridgeResponse, {
-      status: ResponseStatus.SUCC,
+      status: ResponseStatus.FAIL,
       error: e && e.message,
       responseId: request.requestId
     });

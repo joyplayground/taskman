@@ -1,7 +1,5 @@
 const { BrowserWindow, app } = require('electron');
-const db = require('./app/store');
-
-db.initDB();
+require('./app/store');
 
 let mainWindow;
 function createMainWindow() {

@@ -21,7 +21,6 @@ function getRequestId() {
 }
 
 ipcRenderer.on(TaskManBridgeResponse, (evt, response) => {
-  console.log(arguments);
   const responseId = response.responseId;
   const handle = request_callback_queue[responseId];
   delete request_callback_queue[responseId];
