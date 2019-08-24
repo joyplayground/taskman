@@ -1,0 +1,24 @@
+{
+  "name": "taskman",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "npx electron .",
+    "rebuild": "npx electron-rebuild -d=http://npm.taobao.org/mirrors/atom-shell -f -w sqlite3",
+    "install": "SQLITE3_BINARY_SITE=http://npm.taobao.org/mirrors/sqlite3  ELECTRON_MIRROR=http://npm.taobao.org/mirrors/electron/ npm i"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^6.0.2",
+    "electron-rebuild": "^1.8.6",
+    "html-webpack-plugin": "^3.2.0",
+    "webpack": "^4.39.2",
+    "webpack-cli": "^3.3.7"
+  },
+  "dependencies": {
+    "sqlite3": "^4.1.0"
+  }
+}
