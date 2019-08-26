@@ -1,5 +1,5 @@
+
 const path = require('path');
-const fs = require('fs');
 const { app } = require('electron');
 
 module.exports = {

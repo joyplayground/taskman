@@ -1,5 +1,9 @@
 const { BrowserWindow, app } = require('electron');
-require('./app/store');
+const db = require('./app/dao/db');
+const todo = require('./app/dao/todo');
+
+// 开始初始化数据库
+db.init();
 
 let mainWindow;
 function createMainWindow() {
@@ -31,6 +35,24 @@ app.on('activate', () => {
   }
 });
 
-app.once('ready', () => {
-  createMainWindow();
+app.once('will-quit', () => {
+  // 数据库链接关闭
+  db.destroy();
 });
+
+app.once('ready', async () => {
+  // createMainWindow();
+  await db.init();
+  console.log('数据库，表结构初始化成功');
+  await todo.newToDo({
+    content: 'test'
+  });
+  await todo.newToDo({
+    content: 'test 2'
+  });
+  const list = await todo.getToDoList();
+  console.log('list', list);
+
+  // await todo.getToDoList();
+});
+
