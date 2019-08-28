@@ -41,18 +41,6 @@ app.once('will-quit', () => {
 });
 
 app.once('ready', async () => {
-  // createMainWindow();
   await db.init();
-  console.log('数据库，表结构初始化成功');
-  await todo.newToDo({
-    content: 'test'
-  });
-  await todo.newToDo({
-    content: 'test 2'
-  });
-  const list = await todo.getToDoList();
-  console.log('list', list);
-
-  // await todo.getToDoList();
+  createMainWindow();
 });
-

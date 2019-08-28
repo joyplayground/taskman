@@ -32,42 +32,61 @@ ipcRenderer.on(TaskManBridgeResponse, (evt, response) => {
   }
 });
 
-export default {
-  request(service, method, payload, timeout = 3000) {
-    return new Promise((resove, reject) => {
-      setTimeout(() => {
-        reject({
-          status: ResponseStatus.TIMEOUT
-        });
-      }, timeout);
+const request = (service, method, payload, timeout = 3000) => {
+  return new Promise((resove, reject) => {
+    setTimeout(() => {
+      reject({
+        status: ResponseStatus.TIMEOUT
+      });
+    }, timeout);
 
-      const requestId = getRequestId();
-      const requestMessage = {
-        service,
-        method,
-        payload,
-        requestId
-      };
+    const requestId = getRequestId();
+    const requestMessage = {
+      service,
+      method,
+      payload,
+      requestId
+    };
 
-      request_callback_queue[requestId] = response => {
-        const { status, payload } = response;
-        if (status !== ResponseStatus.SUCC) {
-          reject(response);
-        } else {
-          let data;
-          if (payload) {
-            try {
-              data = JSON.parse(payload);
-            } catch (e) {
-              data = payload;
-            }
+    request_callback_queue[requestId] = response => {
+      const { status, payload } = response;
+      if (status !== ResponseStatus.SUCC) {
+        reject(response);
+      } else {
+        let data;
+        if (payload) {
+          try {
+            data = JSON.parse(payload);
+          } catch (e) {
+            data = payload;
           }
-
-          resove(data);
         }
-      };
 
-      ipcRenderer.send(TaskManBridgeRequest, requestMessage);
-    });
-  }
+        resove(data);
+      }
+    };
+
+    ipcRenderer.send(TaskManBridgeRequest, requestMessage);
+  });
+};
+
+const __module = {};
+
+const getService = service => {
+  return new Proxy(__module, {
+    get(target, key) {
+      let mixkey = `${service}/${key}`;
+      if (!__module[mixkey]) {
+        __module[mixkey] = args => {
+          return request(service, key, args);
+        };
+      }
+      return __module[mixkey];
+    }
+  });
+};
+
+export default {
+  request,
+  getService
 };

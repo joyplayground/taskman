@@ -39,4 +39,4 @@ module.exports = {
   }
 };
 
-// bridge.addService('store', module.exports);
+bridge.addService('todo', module.exports);

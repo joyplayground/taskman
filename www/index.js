@@ -17,45 +17,35 @@ class App extends React.Component {
       todos: [],
       content: ''
     };
+
+    this.todoService = bridge.getService('todo');
+
     this.handleInput = this.handleInput.bind(this);
     this.handleKeyPress = this.handleKeyPress.bind(this);
   }
-  componentDidMount() {
-    bridge
-      .request('store', 'query', {
-        sql: `select * from todos;`
+  async componentDidMount() {
+    const rows = await this.todoService.getToDoList();
+    this.setState({
+      todos: rows.map(row => {
+        return {
+          content: row.content,
+          createTime: new Date(row.createTime)
+        };
       })
-      .then(rows => {
-        console.log('row', rows);
-        this.setState({
-          todos: rows.map(row => {
-            return {
-              content: row.content,
-              createTime: new Date(row.createTime)
-            };
-          })
-        });
-      });
+    });
   }
   handleInput(e) {
     this.setState({
       content: e.target.value.trim()
     });
   }
-  handleKeyPress(e) {
+  async handleKeyPress(e) {
     if (!this.state.content) {
       return;
     }
     if (e.key === 'Enter') {
-      bridge.request('store', 'query', {
-        sql: `insert into todos 
-            (content, createTime)
-          values
-            ($content, $createTime);`,
-        params: {
-          $content: this.state.content,
-          $createTime: new Date()
-        }
+      await this.todoService.newToDo({
+        content: this.state.content
       });
 
       this.setState(state => {

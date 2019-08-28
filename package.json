@@ -7,8 +7,7 @@
     "watch:web": "npx webpack --watch",
     "build:web": "npx webpack",
     "start": "npx electron .",
-    "rebuild": "npx electron-rebuild -d=http://npm.taobao.org/mirrors/atom-shell -f -w sqlite3",
-    "install": "SQLITE3_BINARY_SITE=http://npm.taobao.org/mirrors/sqlite3  ELECTRON_MIRROR=http://npm.taobao.org/mirrors/electron/ npm i"
+    "rebuild": "npx electron-rebuild -d=http://npm.taobao.org/mirrors/atom-shell -f -w sqlite3"
   },
   "keywords": [],
   "author": "",
