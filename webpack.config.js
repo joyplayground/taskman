@@ -3,6 +3,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
+  target: 'web',
   entry: {
     index: './www/index.js'
   },
@@ -35,6 +36,9 @@ module.exports = {
     })
   ],
   externals: {
-    electron: 'commonjs electron'
+    electron: 'commonjs electron',
+    react: 'commonjs react',
+    'react-dom': 'commonjs react-dom',
+    sqlite3: 'commonjs sqllite3'
   }
 };

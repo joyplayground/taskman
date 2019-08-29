@@ -7,17 +7,29 @@
     "watch:web": "npx webpack --watch",
     "build:web": "npx webpack",
     "start": "npx electron .",
-    "rebuild": "npx electron-rebuild -d=http://npm.taobao.org/mirrors/atom-shell -f -w sqlite3"
+    "rebuild": "npx electron-rebuild -d=http://npm.taobao.org/mirrors/atom-shell -f -w sqlite3",
+    "pkg": "npx electron-builder"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "build": {
+    "appId": "taskman",
+    "mac": {
+      "category": "cn.honchy.taskman"
+    },
+    "asar": true,
+    "npmRebuild": true,
+    "npmArgs": "SQLITE3_BINARY_SITE=https://npm.taobao.org/mirrors/sqlite3",
+    "electronDownload": {
+      "mirror": "https://npm.taobao.org/mirrors/electron/"
+    }
+  },
   "devDependencies": {
     "@babel/core": "^7.5.5",
     "@babel/preset-react": "^7.0.0",
     "babel-loader": "^8.0.6",
     "electron": "^6.0.2",
-    "electron-rebuild": "^1.8.6",
     "html-webpack-plugin": "^3.2.0",
     "mini-css-extract-plugin": "^0.8.0",
     "webpack": "^4.39.2",

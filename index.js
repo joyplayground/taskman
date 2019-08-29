@@ -1,6 +1,6 @@
 const { BrowserWindow, app } = require('electron');
-const db = require('./app/dao/db');
-const todo = require('./app/dao/todo');
+const db = require('./service/dao/db');
+const todo = require('./service/dao/todo');
 
 // 开始初始化数据库
 db.init();
