@@ -1,0 +1,10 @@
+.layout {
+  display: flex;
+  flex-direction: row;
+}
+.sidebar {
+  width: 200px;
+}
+.content {
+  flex: 1;
+}

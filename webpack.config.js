@@ -28,11 +28,21 @@ module.exports = {
       }
     ]
   },
+  resolve: {
+    alias: {
+      '@component': path.join(__dirname, 'www', 'components'),
+      '@style': path.join(__dirname, 'www', 'style')
+    }
+  },
   plugins: [
     new HtmlWebpackPlugin({
       filename: 'index.html',
       template: './www/index.html',
       chunks: ['index']
+    }),
+    new MiniCssExtractPlugin({
+      filename: '[name].css',
+      chunkFilename: '[id].css'
     })
   ],
   externals: {
