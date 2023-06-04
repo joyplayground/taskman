@@ -8,7 +8,9 @@ if (require('electron-squirrel-startup')) {
 }
 require('./app-appearence').initAppMenu()
 const createWindow = async () => {
-    const dbWorker = await initDBWoker()
+    const { port1, port2 } = new MessageChannelMain()
+
+    const dbWorker = await initDBWoker(port1)
     // Create the browser window.
     const mainWindow = new BrowserWindow({
         width: 800,
@@ -17,26 +19,18 @@ const createWindow = async () => {
             preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
         },
     })
+    mainWindow.on('ready-to-show', () => {
+        console.log('ready to show init success 2')
+        mainWindow.webContents.postMessage('port', null, [port2])
+    })
 
     // and load the index.html of the app.
-    mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY)
+    await mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY)
 
     // Open the DevTools.
-    mainWindow.webContents.openDevTools()
+    mainWindow.webContents.openDevTools({ mode: 'right' })
 
-    // 在这里我们不能使用 ipcMain.handle() , 因为回复需要传输
-    // MessagePort.
-    // Listen for message sent from the top-level frame
-    mainWindow.webContents.mainFrame.on('request-worker-channel', (event) => {
-        // Create a new channel ...
-        const { port1, port2 } = new MessageChannelMain()
-        // ... send one end to the worker ...
-        dbWorker.webContents.postMessage('new-client', null, [port1])
-        // ... and the other end to the main window.
-        event.senderFrame.postMessage('provide-worker-channel', null, [port2])
-        // Now the main window and the worker can communicate with each other
-        // without going through the main process!
-    })
+    console.log('ready to show init success')
 }
 
 // This method will be called when Electron has finished

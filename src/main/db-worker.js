@@ -1,15 +1,19 @@
 const { BrowserWindow } = require('electron')
 
-async function initDBWoker() {
-    const dbworker = new BrowserWindow({
-        show: false,
+async function initDBWoker(port) {
+    const dbWorker = new BrowserWindow({
+        show: true,
         webPreferences: {
-            nodeIntegration: true,
             preload: DB_WINDOW_PRELOAD_WEBPACK_ENTRY,
         },
     })
-    await dbworker.loadURL(DB_WINDOW_WEBPACK_ENTRY)
-    return dbworker
+    dbWorker.on('ready-to-show', () => {
+        console.log('ready to show init success 1 ')
+        dbWorker.webContents.postMessage('port', null, [port])
+    })
+    await dbWorker.loadURL(DB_WINDOW_WEBPACK_ENTRY)
+    dbWorker.webContents.openDevTools({ mode: 'right' })
+    return dbWorker
 }
 
 module.exports.initDBWoker = initDBWoker
