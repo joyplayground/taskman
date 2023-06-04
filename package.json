@@ -1,0 +1,48 @@
+{
+    "name": "taskman",
+    "productName": "taskman",
+    "version": "1.0.0",
+    "description": "My Electron application description",
+    "main": ".webpack/main",
+    "scripts": {
+        "start": "electron-forge start",
+        "package": "electron-forge package",
+        "make": "electron-forge make",
+        "publish": "electron-forge publish",
+        "lint": "echo \"No linting configured\""
+    },
+    "keywords": [],
+    "author": "honchy",
+    "license": "MIT",
+    "devDependencies": {
+        "@babel/preset-env": "^7.22.4",
+        "@babel/preset-react": "^7.22.3",
+        "@electron-forge/cli": "^6.1.1",
+        "@electron-forge/maker-deb": "^6.1.1",
+        "@electron-forge/maker-rpm": "^6.1.1",
+        "@electron-forge/maker-squirrel": "^6.1.1",
+        "@electron-forge/maker-zip": "^6.1.1",
+        "@electron-forge/plugin-webpack": "^6.1.1",
+        "@vercel/webpack-asset-relocator-loader": "^1.7.3",
+        "autoprefixer": "^10.4.14",
+        "babel-loader": "^9.1.2",
+        "css-loader": "^6.8.1",
+        "electron": "25.0.1",
+        "eslint": "^8.41.0",
+        "eslint-config-prettier": "^8.8.0",
+        "eslint-config-react-app": "^7.0.1",
+        "eslint-plugin-react-hooks": "^4.6.0",
+        "node-loader": "^2.0.0",
+        "postcss": "^8.4.24",
+        "postcss-loader": "^7.3.2",
+        "postcss-preset-env": "^8.4.2",
+        "style-loader": "^3.3.3",
+        "tailwindcss": "^3.3.2"
+    },
+    "dependencies": {
+        "better-sqlite3": "^8.4.0",
+        "electron-squirrel-startup": "^1.0.0",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0"
+    }
+}
