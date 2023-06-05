@@ -1,15 +1,9 @@
-const { ipcRenderer } = require('electron')
+const { ipcRenderer, contextBridge } = require('electron')
 
-let port
-ipcRenderer.on('port', (e) => {
-    // port received, make it globally available.
-    console.log('port ', e)
-    port = e.ports[0]
-    port.onmessage = (messageEvent) => {
-        // handle message
-        console.log('main thread: ' + messageEvent)
-    }
-})
+const channel = new MessageChannel()
+
+ipcRenderer.postMessage('ipc-channel', null, [channel.port1])
+
 setTimeout(() => {
-    port.postMessage('hello world!')
+    channel.port2.postMessage('hello world!55')
 }, 3000)

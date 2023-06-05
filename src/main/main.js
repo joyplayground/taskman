@@ -1,4 +1,4 @@
-const { app, BrowserWindow, MessageChannelMain } = require('electron')
+const { app, BrowserWindow, MessageChannelMain, ipcMain } = require('electron')
 const path = require('path')
 const { initDBWoker } = require('./db-worker')
 
@@ -7,10 +7,22 @@ if (require('electron-squirrel-startup')) {
     app.quit()
 }
 require('./app-appearence').initAppMenu()
-const createWindow = async () => {
-    const { port1, port2 } = new MessageChannelMain()
 
-    const dbWorker = await initDBWoker(port1)
+const createWindow = async () => {
+    let dbWorker = null
+    let port = null
+    ipcMain.on('ipc-channel', (event) => {
+        // 当我们在主进程中接收到 MessagePort 对象, 它就成为了
+        // MessagePortMain.
+        port = event.ports[0]
+
+        dbWorker.webContents.postMessage('ipc-channel', null, [port])
+    })
+    ipcMain.on('ipc-channel-db-worker-ready', () => {
+        // MessagePortMain 阻塞消息直到 .start() 方法被调用
+        port.start()
+    })
+    dbWorker = await initDBWoker()
     // Create the browser window.
     const mainWindow = new BrowserWindow({
         width: 800,
@@ -19,13 +31,9 @@ const createWindow = async () => {
             preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
         },
     })
-    mainWindow.on('ready-to-show', () => {
-        console.log('ready to show init success 2')
-        mainWindow.webContents.postMessage('port', null, [port2])
-    })
 
     // and load the index.html of the app.
-    await mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY)
+    mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY)
 
     // Open the DevTools.
     mainWindow.webContents.openDevTools({ mode: 'right' })
