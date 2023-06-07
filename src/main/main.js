@@ -9,30 +9,27 @@ if (require('electron-squirrel-startup')) {
 require('./app-appearence').initAppMenu()
 
 const createWindow = async () => {
-    let dbWorker = null
-    let port = null
+    let dbWorker = await initDBWoker()
+
     ipcMain.on('ipc-channel', (event) => {
         // 当我们在主进程中接收到 MessagePort 对象, 它就成为了
         // MessagePortMain.
-        port = event.ports[0]
-
+        let port = event.ports[0]
         dbWorker.webContents.postMessage('ipc-channel', null, [port])
     })
-    ipcMain.on('ipc-channel-db-worker-ready', () => {
-        // MessagePortMain 阻塞消息直到 .start() 方法被调用
-        port.start()
-    })
-    dbWorker = await initDBWoker()
+
     // Create the browser window.
     const mainWindow = new BrowserWindow({
         width: 800,
         height: 600,
         webPreferences: {
+            // eslint-disable-next-line no-undef
             preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
         },
     })
 
     // and load the index.html of the app.
+    // eslint-disable-next-line no-undef
     mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY)
 
     // Open the DevTools.
